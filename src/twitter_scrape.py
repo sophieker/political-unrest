@@ -6,12 +6,11 @@ TWITTER_API = os.environ.get("TWITTER_API")
 TWITTER_SECRET = os.environ.get("TWITTER_SECRET")
 TWITTER_BEARER = os.environ.get("TWITTER_BEARER")
 
-auth = tweepy.OAuth2BearerHandler(TWITTER_BEARER)
-api = tweepy.API(auth)
+api = tweepy.Client(TWITTER_BEARER)
 
-tweets = tweepy.Cursor(api.search_tweets, q="#KanyeWest").items(250)
+tweets = api.search_recent_tweets("#KanyeWest", max_results=100)
 
-tweets = [tweet for tweet in tweets]
+tweets = [tweet.data for tweet in tweets.data]
 
 with open("data.json", "w") as f:
 	json.dump(tweets, f)
